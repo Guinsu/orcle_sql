@@ -25,7 +25,6 @@
 			<th>deptNo</th>
 			<th>dName</th>
 			<th>loc</th>
-			<th></th>
 		</tr>
 		<%
 			for(Dept d : deptList){
@@ -46,7 +45,7 @@
 			<th>empNo</th>
 			<th>eName</th>
 			<th>sal</th>
-			<th></th>
+			
 		</tr>
 		<%
 			for(Emp d : empList){
