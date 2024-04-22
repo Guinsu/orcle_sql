@@ -7,6 +7,7 @@ import java.util.*;
 import vo.Dept;
 
 public class DeptDAO {
+		
 	//Map 사용
 	public static ArrayList<HashMap<String, Object>> selectDeptListOnOff() throws Exception{
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();  // dept[]
@@ -25,7 +26,7 @@ public class DeptDAO {
 			list.add(m);
 		}
 		
-		
+		conn.close();
 		return list;
 	}
 	
@@ -41,13 +42,14 @@ public class DeptDAO {
 		
 		while(rs.next()) {
 			Dept d = new Dept();
-			d.deptNo = rs.getInt("deptNo");
-			d.dName = rs.getString("dname");
-			d.loc = rs.getString("loc");
+			d.setDeptNo(rs.getInt("deptNo"));
+			d.setdName(rs.getString("dname"));
+			d.setLoc(rs.getString("loc"));
 			list.add(d);
+			
 		}
 		
-		
+		conn.close();
 		return list;
 	}
 }
