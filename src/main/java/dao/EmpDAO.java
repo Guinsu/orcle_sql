@@ -8,6 +8,35 @@ import vo.Emp;
 
 public class EmpDAO {
 	
+	//q005orderby
+	public static ArrayList<Emp> selectEmpLisSort(String col, String sort)throws Exception{
+		ArrayList<Emp> list = new ArrayList<>();
+		Connection conn = DBHelper.getConnection();
+		
+		
+		System.out.println(col + "<-- EmpDAO.selectEmpLisSort param col ");
+		System.out.println(sort + "<-- EmpDAO.selectEmpLisSort param sort");
+		
+		String sql = "SELECT empno, ename"
+				+ " FROM emp";
+		
+		if(col != null && sort != null) {
+			sql = sql + " ORDER BY " + col + " " + sort;
+		}
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		System.out.println(stmt);
+		while(rs.next()) {
+			Emp e = new Emp();
+			e.setEmpNo(rs.getInt("empno"));
+			e.seteName(rs.getString("ename"));
+			list.add(e);
+		}
+		
+		conn.close();
+		return list;
+	}
 	// q004WHEREIn.jsp
 	public static ArrayList<Emp> selectEmpListByGrade(ArrayList<Integer> ckList)throws Exception{
 		ArrayList<Emp> list = new ArrayList<>();
@@ -59,6 +88,7 @@ public class EmpDAO {
 			e.setGrade(rs.getInt("grade"));
 			list.add(e);
 		}
+		conn.close();
 		return list;
 	} 
 	 
