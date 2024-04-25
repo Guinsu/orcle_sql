@@ -8,14 +8,73 @@ import vo.Emp;
 
 public class EmpDAO {
 	
+	//q007LeftOuterJoin.jsp
+	public static ArrayList<HashMap<String, Object>> selectEmpMgr() throws Exception{
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		Connection conn = DBHelper.getConnection();
+		
+		// 
+		String sql = "SELECT e1.empno, e1.ename, e1.grade, NVL(e2.ename, '관리자없음') AS mgrName, NVL(e2.grade, 0) AS mgrGrade"
+				+" FROM emp e1"
+				+" LEFT OUTER JOIN emp e2 ON e1.mgr = e2.empno"
+				+" ORDER BY e1.empno ASC";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<>();
+			m.put("empno", rs.getInt("empno"));
+			m.put("ename", rs.getString("ename"));
+			m.put("grade", rs.getInt("grade"));
+			m.put("mgrName", rs.getString("mgrName"));
+			m.put("mgrGrade", rs.getInt("mgrGrade"));
+			list.add(m);
+		}
+		
+		conn.close();
+		return list;
+	}
+	
+	
+	// q006GroupBy.jsp
+	public static ArrayList<HashMap<String, Integer>> selectEmpSalState() throws Exception{
+		ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		Connection conn = DBHelper.getConnection();
+		
+		// 
+		String sql = "SELECT grade, count(*) count, SUM(sal) sum, AVG(sal) avg, MAX(sal) max, MIN(sal) min"
+				+ " FROM emp "
+				+ " GROUP BY grade"
+				+ " ORDER BY grade ASC";
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			HashMap<String, Integer> m = new HashMap<>();
+			m.put("grade", rs.getInt("grade"));
+			m.put("count", rs.getInt("count"));
+			m.put("sum", rs.getInt("sum"));
+			m.put("avg", rs.getInt("avg"));
+			m.put("max", rs.getInt("max"));
+			m.put("min", rs.getInt("min"));
+			list.add(m);
+		}
+		
+		conn.close();
+		return list;
+	}
+	
+	
 	//q005orderby
 	public static ArrayList<Emp> selectEmpLisSort(String col, String sort)throws Exception{
 		ArrayList<Emp> list = new ArrayList<>();
 		Connection conn = DBHelper.getConnection();
 		
 		
-		System.out.println(col + "<-- EmpDAO.selectEmpLisSort param col ");
-		System.out.println(sort + "<-- EmpDAO.selectEmpLisSort param sort");
+		//System.out.println(col + "<-- EmpDAO.selectEmpLisSort param col ");
+		//System.out.println(sort + "<-- EmpDAO.selectEmpLisSort param sort");
 		
 		String sql = "SELECT empno, ename"
 				+ " FROM emp";
@@ -98,7 +157,7 @@ public class EmpDAO {
 	public static ArrayList<HashMap<String, String>> selectJobCaseList() throws Exception{
 		
 		ArrayList<HashMap<String, String>> list = new  ArrayList<>();
-		 Connection conn = DBHelper.getConnection();
+		Connection conn = DBHelper.getConnection();
 		
 		String sql = "SELECT ename,job, CASE\r\n"
 				+ "					        WHEN job = 'PRESIDENT' Then '빨강'\r\n"
